@@ -1,6 +1,6 @@
 # Heurísticas: Implementação de Algoritmos de Otimização em C;
 
-Este repositório contém a implementação de duas heurísticas populares para resolver problemas de otimização NP-Difícil em C#. Os algoritmos desenvolvidos são destinados a resolver um problema específico escolhido entre aqueles abordados no Trabalho Prático 1.
+Este repositório contém a implementação de duas heurísticas populares para resolver problemas de otimização NP-Difícil em C. Os algoritmos desenvolvidos são destinados a resolver um problema específico escolhido entre aqueles abordados no Trabalho Prático 1.
 
 # Objetivo
 O objetivo deste trabalho é implementar e comparar duas abordagens heurísticas: uma baseada em Busca Local e outra em Processo Evolutivo. Ambas as técnicas são aplicadas ao mesmo problema, permitindo uma comparação direta de sua eficácia e desempenho.
