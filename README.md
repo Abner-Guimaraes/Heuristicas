@@ -14,3 +14,7 @@ A heurística de Busca Local é um método iterativo que examina soluções vizi
 
 2. Processo Evolutivo
 O Processo Evolutivo é uma técnica baseada em algoritmos genéticos, inspirada no processo de seleção natural. Neste trabalho, aplicaremos um algoritmo genético ao TSP, criando uma população inicial de soluções e aplicando operadores genéticos como mutação e recombinação para evoluir soluções cada vez melhores.
+
+![Demonstração das Atividades](https://miro.medium.com/v2/resize:fit:996/1*Sw1EZeiWaRzT9Jq5aioXRg.gif)
+
+*Demonstração após finalizar as atividades:*
