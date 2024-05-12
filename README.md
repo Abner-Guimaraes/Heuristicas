@@ -1,4 +1,4 @@
-# Heurísticas: Implementação de Algoritmos de Otimização em C#
+# Heurísticas: Implementação de Algoritmos de Otimização em C;
 
 Este repositório contém a implementação de duas heurísticas populares para resolver problemas de otimização NP-Difícil em C#. Os algoritmos desenvolvidos são destinados a resolver um problema específico escolhido entre aqueles abordados no Trabalho Prático 1.
 
