@@ -320,68 +320,56 @@ void AG(Grafo g, int *melhorSolucao, int tamPop, int numGeracoes, double taxaCro
   free(fitness);
 }
 
-/* void imprime_QualidadeSolucao(int *solucao, FILE *saidaQ) {
-  int resposta = 0;
+void imprime_QualidadeSolucao(int *vetorQualidadesVND, int* vetorQualidadesAG,  FILE *saidaQ) {
 
-  fprintf(saidaQ, "Numero de Vertices: %d\n", G->MaxNumeroVertices);
-  fprintf(saidaQ, "Numero de Arestas: %d\n", G->QuantidadeArestas);
-  while (resposta != 1 && resposta != 2) {
-    printf("Escolha a opção com peso ou sem peso para escrever no arquivo txt:");
-    printf("\n1. Digite 1 para mostrar sem peso\n2. Digite 2 para mostrar com peso\n> ");
-    scanf("%d", &resposta);
+  fprintf(saidaQ, "VND AG \n");
+
+  for(int i =0; i< 10; i++){
+    fprintf(saidaQ, "%d %d", vetorQualidadesVND[i], vetorQualidadesAG[i]);
+    fprintf(saidaQ,"\n");
   }
 
-  switch (resposta) {
-    case 1:
-      for (int i = 0; i < G->MaxNumeroVertices; i++) {
-        fprintf(saidaQ, "Vertice %d:", i);
-        for (int j = 0; j < G->MaxNumeroVertices; j++) {
-          if (G->matrizAdjacencia[i][j] != 0) {
-            fprintf(saidaQ, " %d", j);
-          }
-        }
-        fprintf(saidaQ, "\n");
-      }
-      break;
-    case 2:
-      for (int i = 0; i < G->MaxNumeroVertices; i++) {
-        fprintf(saidaQ, "Vertice %d:", i);
-        for (int j = 0; j < G->MaxNumeroVertices; j++) {
-          if (G->matrizAdjacencia[i][j] != 0) {
-            fprintf(saidaQ, " (%d peso %d)", j, G->matrizAdjacencia[i][j]);
-          }
-        }
-        fprintf(saidaQ, "\n");
-      }
-      break;
-    default:
-      printf("\nOpção inválida!\n");
-      break;
-  }
 }
- */
+
+void imprime_TempoSolucao(double *vetorTemposVND, double* vetorTemposAG,  FILE *saidaT) {
+
+  fprintf(saidaT, "VND AG \n");
+  for(int i =0; i< 10; i++){
+    fprintf(saidaT, "%f %f", vetorTemposVND[i], vetorTemposAG[i]);
+    fprintf(saidaT,"\n");
+  }
+
+}
+
 
 int main(void) {
   srand(time(NULL));
 
+  clock_t start, end;
+  double cpuTime;
+
+
   int PesoMaximo = 50;
   int vetorQualidadesVND[10];
   int vetorQualidadesAG[10];
+  double vetorTemposVND[10];
+  double vetorTemposAG[10];
+  FILE *saidaQ = fopen("qualidade_solucoes", "w");
+  FILE *saidaT= fopen("tempo_solucoes", "w");
+
+  int NumeroMaxVertices = rand() % 51 + 25;
+  int QuantidadeMaxArestas = NumeroMaxVertices * (NumeroMaxVertices - 1) / 2; // n*(n-1)/2
+
   for (int i = 0; i < 10; i++) {
     char nome_arquivo[20];
-    sprintf(nome_arquivo, "grafo.txt");
-    //sprintf(nome_arquivo, "grafo_%d.txt", i); // Nome do arquivo com um número incremental
+    sprintf(nome_arquivo, "grafo_%d.txt", i); // Nome do arquivo com um número incremental
     FILE *saida = fopen(nome_arquivo, "w");
 
     if (saida == NULL) {
       printf("Erro ao abrir o arquivo.\n");
       return 1;
     }
-
-    int NumeroMaxVertices = 10;
-    //int NumeroMaxVertices = rand() % 51 + 25;
     printf("Numero total de Vertices: %d\n", NumeroMaxVertices);
-    int QuantidadeMaxArestas = NumeroMaxVertices * (NumeroMaxVertices - 1) / 2; // n*(n-1)/2
     printf("Numero total de Arestas: %d\n", QuantidadeMaxArestas);
 
     Grafo G = Criacao_grafo_aleatorio(NumeroMaxVertices, QuantidadeMaxArestas, PesoMaximo);
@@ -395,18 +383,27 @@ int main(void) {
         printf("%d ",solucao[i]);
         
     }
-    vetorQualidadesVND[i] = calcDist(G,solucao);
     printf("| Qualidade primeira solução: %d \n", calcDist(G, solucao));
+    start = clock();
     VND(G,solucao,100);
+    vetorQualidadesVND[i] = calcDist(G,solucao);
+
+    end = clock();
+    cpuTime = ((double) (end - start)) *1000 / CLOCKS_PER_SEC;
+    vetorTemposVND[i] = cpuTime;
+
     printf("Solução: ");
     for (int i = 0; i < NumeroMaxVertices; i++)
     {
         printf("%d ", solucao[i]);
     }
     printf("| Qualidade solução pós-VND: %d \n", calcDist(G, solucao));
-    AG(G, s2, 50, 200, 0.7, 0.01);
+    start = clock();
+    AG(G, s2, 100, 200, 0.7, 0.01);
+    end = clock();
+    cpuTime = ((double) (end - start)) *1000 / CLOCKS_PER_SEC;
     vetorQualidadesAG[i] = calcDist(G,s2);
-
+    vetorTemposAG[i] = cpuTime;
     printf("Solução: ");
     for (int i = 0; i < NumeroMaxVertices; i++)
     {
@@ -418,11 +415,8 @@ int main(void) {
     free_liberaGrafo(G);
     fclose(saida);
   }
-  printf("\n\n\n\n\n");
-  for(int i =0; i< 10; i++){
-    printf("%d %d", vetorQualidadesVND[i], vetorQualidadesAG[i]);
-    printf("\n");
-  }
+  imprime_QualidadeSolucao(vetorQualidadesVND,vetorQualidadesAG,saidaQ);
+  imprime_TempoSolucao(vetorTemposVND,vetorTemposAG,saidaT);
 
   return 0;
 }
